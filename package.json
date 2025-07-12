@@ -30,7 +30,6 @@
     "moment": "^2.29.4",
     "node-cache": "^5.1.2",
     "puppeteer": "^24.12.1",
-    "search-scraper": "^2.0.1",
     "sqlite3": "^5.1.6",
     "uuid": "^9.0.1"
   },

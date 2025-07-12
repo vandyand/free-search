@@ -7,7 +7,6 @@ const path = require('path');
 require('dotenv').config();
 
 const searchRoutes = require('./routes/search');
-const searchScraperRoutes = require('./routes/searchScraper');
 const puppeteerSearchRoutes = require('./routes/puppeteerSearch');
 const apiRoutes = require('./routes/api');
 const database = require('./database/init');
@@ -43,7 +42,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/search', searchRoutes);
-app.use('/api/scraper', searchScraperRoutes);
 app.use('/api/puppeteer', puppeteerSearchRoutes);
 app.use('/api', apiRoutes);
 
@@ -54,7 +52,6 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       search: '/api/search',
-      scraper: '/api/scraper',
       puppeteer: '/api/puppeteer',
       docs: '/api/docs',
       health: '/health',

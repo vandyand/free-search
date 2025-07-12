@@ -133,9 +133,6 @@ curl "http://localhost:3000/api/search/history"
 # Get limited search history
 curl "http://localhost:3000/api/search/history?limit=10"
 
-# Get scraper service history
-curl "http://localhost:3000/api/scraper/history"
-
 # Get Puppeteer service history
 curl "http://localhost:3000/api/puppeteer/history"
 ```
@@ -171,12 +168,6 @@ curl "http://localhost:3000/api/docs"
 # Available search engines
 curl "http://localhost:3000/api/search/engines"
 
-# Scraper service health
-curl "http://localhost:3000/api/scraper/health"
-
-# Available scraper engines
-curl "http://localhost:3000/api/scraper/engines"
-
 # Puppeteer service health
 curl "http://localhost:3000/api/puppeteer/health"
 
@@ -189,9 +180,6 @@ curl "http://localhost:3000/api/puppeteer/engines"
 ```bash
 # Clear search cache
 curl -X DELETE "http://localhost:3000/api/search/cache"
-
-# Clear scraper cache
-curl -X POST "http://localhost:3000/api/scraper/cache/clear"
 
 # Clear Puppeteer cache
 curl -X POST "http://localhost:3000/api/puppeteer/cache/clear"
@@ -210,18 +198,6 @@ curl -X POST "http://localhost:3000/api/puppeteer/cache/clear"
 | PUT | `/api/search/preferences` | Update user preferences |
 | GET | `/api/search/engines` | Get available search engines |
 | DELETE | `/api/search/cache` | Clear search cache |
-
-### Scraper Endpoints (NPM Library)
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/scraper/search` | Perform a web search (npm library) |
-| GET | `/api/scraper/history` | Get search history |
-| GET | `/api/scraper/preferences` | Get user preferences |
-| POST | `/api/scraper/preferences` | Update user preferences |
-| GET | `/api/scraper/engines` | Get available search engines |
-| POST | `/api/scraper/cache/clear` | Clear search cache |
-| GET | `/api/scraper/health` | Scraper service health |
 
 ### Puppeteer Endpoints (Most Reliable)
 
@@ -255,16 +231,6 @@ curl -X POST "http://localhost:3000/api/puppeteer/cache/clear"
 | `engine` | string | No | `google` | Search engine (`google`, `bing`, `duckduckgo`, `yahoo`, `brave`) |
 | `page` | number | No | `1` | Page number (1-10) |
 | `safe` | boolean | No | `true` | Safe search filter |
-
-### GET /api/scraper/search (NPM Library)
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `q` | string | Yes | - | Search query |
-| `engine` | string | No | `all` | Search engine (`google`, `bing`, `yahoo`, `duckduckgo`, `aol`, `ask`, `all`) |
-| `page` | number | No | `1` | Page number (1-10) |
-| `safe` | boolean | No | `true` | Safe search filter |
-| `format` | string | No | `json` | Response format (`json`, `text`) |
 
 ### GET /api/puppeteer/search (Most Reliable)
 
@@ -328,22 +294,21 @@ curl -X POST "http://localhost:3000/api/puppeteer/cache/clear"
 
 ### Three Search Services Available
 
-| Feature | Custom Scraping (`/api/search`) | NPM Library (`/api/scraper`) | Puppeteer (`/api/puppeteer`) |
-|---------|----------------------------------|-------------------------------|------------------------------|
-| **Engines** | Google, Bing, DuckDuckGo, Yahoo, Brave | Google, Bing, Yahoo, DuckDuckGo, AOL, Ask | Bing, Searx, Ecosia, Baidu (4/15 working) |
-| **Reliability** | Variable (depends on site changes) | Low (library issues) | High (modern browser automation) |
-| **Performance** | Fast (direct HTTP requests) | Very fast (but no results) | Slower (browser automation) |
-| **Dependencies** | Minimal (axios, cheerio) | Heavy (Nightmare.js, Electron) | Medium (Puppeteer) |
-| **Maintenance** | Manual (requires updates) | Automatic (but broken) | Manual (requires updates) |
-| **Fallback** | Built-in multi-engine fallback | Individual engine handling | Built-in multi-engine fallback |
-| **Text Format** | No | Yes (`format=text`) | Yes (`format=text`) |
-| **Success Rate** | ~80% | 0% (no results) | ~100% |
+| Feature | Custom Scraping (`/api/search`) | Puppeteer (`/api/puppeteer`) |
+|---------|----------------------------------|------------------------------|
+| **Engines** | Google, Bing, DuckDuckGo, Yahoo, Brave | Bing, Searx, Ecosia, Baidu (4/15 working) |
+| **Reliability** | Variable (depends on site changes) | High (modern browser automation) |
+| **Performance** | Fast (direct HTTP requests) | Slower (browser automation) |
+| **Dependencies** | Minimal (axios, cheerio) | Medium (Puppeteer) |
+| **Maintenance** | Manual (requires updates) | Manual (requires updates) |
+| **Fallback** | Built-in multi-engine fallback | Built-in multi-engine fallback |
+| **Text Format** | No | Yes (`format=text`) |
+| **Success Rate** | ~80% | ~100% |
 
 ### When to Use Each Service
 
 - **Use Custom Scraping** (`/api/search`): For fastest responses, lighter resource usage, or when you need Brave search
 - **Use Puppeteer** (`/api/puppeteer`): For highest reliability and consistent results
-- **Avoid NPM Library** (`/api/scraper`): Currently not working properly
 
 ## Development
 
@@ -359,7 +324,7 @@ npm run dev
 npm test
 
 # Test and compare both search services
-node scripts/test-scraper.js
+node scripts/test-puppeteer-engines.js
 
 # Comprehensive test of all three services
 node scripts/test-all-services.js
