@@ -1,7 +1,9 @@
-FROM node:18-alpine
+FROM ghcr.io/puppeteer/puppeteer:latest
 
 # Set working directory
-WORKDIR /app
+WORKDIR /home/pptruser/app
+
+USER root
 
 # Copy package files
 COPY package*.json ./
@@ -13,14 +15,9 @@ RUN npm ci --only=production
 COPY . .
 
 # Create database directory
-RUN mkdir -p database
+RUN mkdir -p database && chown -R pptruser:pptruser /home/pptruser/app
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
-
-# Change ownership of the app directory
-RUN chown -R nodejs:nodejs /app
+USER pptruser
 
 # Expose port
 EXPOSE 3000
